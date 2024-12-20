@@ -20,73 +20,51 @@ class GFG {
             ArrayList<Integer> ans = ob.spirallyTraverse(matrix);
             for (Integer val : ans) System.out.print(val + " ");
             System.out.println();
+
+            System.out.println("~");
         }
     }
 }
 // } Driver Code Ends
 
-
 class Solution {
     // Function to return a list of integers denoting spiral traversal of matrix.
-    public ArrayList<Integer> spirallyTraverse(int matrix[][]) {
-         int i=0,j=-1,d=0,count=0;
-        int n=matrix.length,m=matrix[0].length;
-        ArrayList<Integer> ans=new ArrayList<>();
-        int flag[][]=new int[n][m];
-        while(true){
-        
-            if(count==n*m) break;
-          if(d==0){
-              if(j+1>=m || flag[i][j+1]==1){
-                  d=1;
-                  count--;
-              }
-              else{ 
-                  j++;
-                  flag[i][j]=1;
-                  ans.add(matrix[i][j]);
-                  
-              }
-          }
-          else if(d==1){
-               if(i+1>=n || flag[i+1][j]==1){
-                  d=2;
-                  count--;
-              }
-              else {
-                  i++;
-                  flag[i][j]=1;
-                  ans.add(matrix[i][j]);
-                  
-              }
-          }
-           else if(d==2){
-               if(j-1<0 || flag[i][j-1]==1){
-                  d=3;
-                  count--;
-              }
-              else{ 
-                  j--;
-                  flag[i][j]=1;
-                  ans.add(matrix[i][j]);
-                  
-              }
-          }
-           else if(d==3){
-               if(i-1<0 || flag[i-1][j]==1){
-                  d=0;
-                  count--;
-              }
-              else {
-                  i--;
-                  flag[i][j]=1;
-                  
-                  ans.add(matrix[i][j]);
-                  
-              }
-          }
-          count++;
+    public ArrayList<Integer> spirallyTraverse(int mat[][]) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        int r=mat.length , c = mat[0].length;
+        int top = 0 , down = r-1 , left = 0 , right = c-1 , d = 0;
+        while(top<=down && left<=right){
+            switch(d){
+                case 0:
+                    for(int i=left ; i<=right ; i++){
+                        list.add(mat[top][i]);
+                    }
+                    top++;
+                    break;
+                case 1 :
+                    for(int i=top;i<=down;i++){
+                        list.add(mat[i][right]);
+                    }
+                    right--;
+                    break;
+                case 2:    
+                    for(int i=right ; i>=left ;i--){
+                        list.add(mat[down][i]);
+                    }
+                    down--;
+                    break;
+                case 3:
+                    for(int i=down;i>=top;i--){
+                        list.add(mat[i][left]);
+                    }
+                    left++;
+                    break;
+            }
+            if(d==3)
+            d=0;
+            else
+            d++;
         }
-        return ans;// code here
+        return list;
     }
 }
