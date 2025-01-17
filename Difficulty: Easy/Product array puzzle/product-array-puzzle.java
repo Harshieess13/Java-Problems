@@ -6,22 +6,24 @@ import java.util.*;
 
 class GFG {
     public static void main(String args[]) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine());
         while (t > 0) {
-            int n = sc.nextInt();
-            int[] array = new int[n];
+            String inputLine[] = br.readLine().trim().split(" ");
+            int n = inputLine.length;
+            int arr[] = new int[n];
             for (int i = 0; i < n; i++) {
-                array[i] = sc.nextInt();
+                arr[i] = Integer.parseInt(inputLine[i]);
             }
             Solution ob = new Solution();
-            long[] ans = new long[n];
-            ans = ob.productExceptSelf(array);
+            int[] ans = new int[n];
+            ans = ob.productExceptSelf(arr);
 
             for (int i = 0; i < n; i++) {
                 System.out.print(ans[i] + " ");
             }
             System.out.println();
+            System.out.println("~");
             t--;
         }
     }
@@ -31,28 +33,21 @@ class GFG {
 
 
 // User function Template for Java
-
 class Solution {
-    public static long[] productExceptSelf(int nums[]) {
-     int n = nums.length;
-        long[] prefixProduct = new long[n];
-        long[] suffixProduct = new long[n];
-        long[] result = new long[n];
-        
-        prefixProduct[0] = 1;
-        for(int i=1; i<n; i++){
-            prefixProduct[i] = prefixProduct[i-1] * nums[i-1];
+    public static int[] productExceptSelf(int arr[]) {
+        int product=1;
+        int count=0;
+        for(int i:arr){
+            if(i!=0) product*=i;
+            else count++;
         }
-        
-        suffixProduct[n-1] = 1;
-        for(int i=n-2; i>=0; i--){
-            suffixProduct[i] = suffixProduct[i+1] * nums[i+1];
+        int ans[]=new int[arr.length];
+        if(count>=2) return ans;
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]!=0 && count==0) ans[i]=product/arr[i];
+            else if(arr[i]!=0 && count>0) ans[i]=0;
+            else ans[i]=product;
         }
-        
-        for(int i=0; i<n; i++){
-            result[i] = prefixProduct[i] * suffixProduct[i];
-        }
-        
-        return result;   // code here
+        return ans;  // code here
     }
 }
