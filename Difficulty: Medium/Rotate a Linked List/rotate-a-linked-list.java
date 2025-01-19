@@ -30,37 +30,39 @@ class Node{
 */
 
 class Solution {
-    // Function to rotate a linked list.
     public Node rotate(Node head, int k) {
-        if(head == null || head.next == null) return head;
-        if(head.next.next == null) {
-            if(k % 2 == 0) return head;
-            head.next.next = new Node(head.data);
-            return head.next;
+       Node slow = head;
+        Node temp =head;
+        Node fast = head.next;
+        int count=1;
+        while(fast!=null && fast.next!=null){
+            slow=slow.next;
+            temp=temp.next.next;
+            fast = fast.next.next;
+            count++;
         }
-        Node temp = head;
-        int c = 0;
-        while(temp != null) {
-            temp = temp.next;
-            c++;
+        if(fast==null){
+            count = (count*2)-1;
         }
-        k = k % c;
-        if(k == 0) return head;
-        temp = head;
-        while(--k != 0) {
-            temp = temp.next;
+        else{
+            count = count*2;
+            temp = fast;
         }
-        if(temp.next == null) {
+        int rotations = k%count;
+        if(rotations==0 || count==1){
             return head;
         }
-        Node head2 = temp.next;
-        temp.next = null;
-        temp = head2;
-        while(temp.next != null) {
-            temp = temp.next;
+        int i=1;
+        Node curnext = head.next;
+        Node curr = head;
+        while(i<rotations){
+            curr=curr.next;
+            curnext = curnext.next;
+            i++;
         }
         temp.next = head;
-        return head2;  // add code here
+        curr.next =null;
+        return curnext;  // add code here
     }
 }
 
@@ -105,6 +107,8 @@ public class GFG {
             Solution ob = new Solution();
             head = ob.rotate(head, k);
             printList(head);
+
+            System.out.println("~");
         }
     }
 }
