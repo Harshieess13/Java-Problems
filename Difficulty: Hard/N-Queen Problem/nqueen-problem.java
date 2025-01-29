@@ -17,6 +17,16 @@ class GFG {
             if (ans.size() == 0)
                 System.out.println("-1");
             else {
+                ans.sort((list1, list2) -> {
+                    int size = Math.min(list1.size(), list2.size());
+                    for (int i = 0; i < size; i++) {
+                        if (!list1.get(i).equals(list2.get(i))) {
+                            return list1.get(i) - list2.get(i);
+                        }
+                    }
+                    return list1.size() - list2.size();
+                });
+
                 for (int i = 0; i < ans.size(); i++) {
                     System.out.print("[");
                     for (int j = 0; j < ans.get(i).size(); j++)
@@ -25,6 +35,8 @@ class GFG {
                 }
                 System.out.println();
             }
+
+            System.out.println("~");
         }
     }
 }
@@ -34,35 +46,44 @@ class GFG {
 // User function Template for Java
 
 class Solution {
-    public boolean validate(int i,int j,int b[][]){
-        int ci=i,cj=j;
-        while(cj>=0) if(b[ci][cj--]==1) return false;
-        ci=i;cj=j;
-        while(ci>=0 && cj>=0) if(b[ci--][cj--]==1) return false;
-        ci=i;cj=j;
-        while(ci<b.length && cj>=0) if(b[ci++][cj--]==1) return false;
-        return true;
+    public ArrayList<ArrayList<Integer>> nQueen(int n) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        int[] board = new int[n];  // This will store the column position for each queen in a row.
+        solveNQueens(n, 0, board, result);
+        return result;
     }
-    public void dfs(int j,ArrayList<Integer> al,ArrayList<ArrayList<Integer>> ans,int n,int b[][]){
-        if(j==n){
-            ans.add(new ArrayList<>(al));
+
+    // Backtracking helper function
+    private void solveNQueens(int n, int row, int[] board, ArrayList<ArrayList<Integer>> result) {
+        // If all queens are placed, add the solution to the result
+        if (row == n) {
+            ArrayList<Integer> solution = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                solution.add(board[i] + 1);  // Convert 0-based index to 1-based position
+            }
+            result.add(solution);
             return;
         }
-        for(int i=0;i<n;i++){
-            if(validate(i,j,b)){
-                b[i][j]=1;
-                al.add(i+1);
-                dfs(j+1,al,ans,n,b);
-                b[i][j]=0;
-                al.remove(al.size()-1);
+
+        // Try placing a queen in each column of the current row
+        for (int col = 0; col < n; col++) {
+            // Check if the queen can be placed at (row, col)
+            if (isSafe(board, row, col)) {
+                board[row] = col;  // Place the queen at (row, col)
+                solveNQueens(n, row + 1, board, result);  // Recur to place queens in the next row
+                board[row] = -1;  // Backtrack (remove the queen)
             }
         }
     }
-    public ArrayList<ArrayList<Integer>> nQueen(int n) {
-        // code here
-        ArrayList<ArrayList<Integer>> ans=new ArrayList<>();
-        int[][] b=new int[n][n];
-        dfs(0,new ArrayList<>(),ans,n,b);
-        return ans;
+
+    // Check if it's safe to place a queen at (row, col)
+    private boolean isSafe(int[] board, int row, int col) {
+        for (int i = 0; i < row; i++) {
+            // Check column conflict or diagonal conflicts
+            if (board[i] == col || Math.abs(board[i] - col) == Math.abs(i - row)) {
+                return false;
+            }
+        }
+        return true;  // code here
     }
 }
