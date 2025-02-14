@@ -13,19 +13,20 @@ class GFG {
             int k = Integer.parseInt(br.readLine().trim());
 
             String[] line1 = br.readLine().trim().split(" ");
-            int[] arr1 = new int[line1.length];
+            int[] a = new int[line1.length];
             for (int i = 0; i < line1.length; i++) {
-                arr1[i] = Integer.parseInt(line1[i]);
+                a[i] = Integer.parseInt(line1[i]);
             }
 
             String[] line2 = br.readLine().trim().split(" ");
-            int[] arr2 = new int[line2.length];
+            int[] b = new int[line2.length];
             for (int i = 0; i < line2.length; i++) {
-                arr2[i] = Integer.parseInt(line2[i]);
+                b[i] = Integer.parseInt(line2[i]);
             }
 
             Solution ob = new Solution();
-            System.out.println(ob.kthElement(k, arr1, arr2));
+            System.out.println(ob.kthElement(a, b, k));
+            System.out.println("~");
         }
     }
 }
@@ -36,13 +37,19 @@ class GFG {
 // User function Template for Java
 
 class Solution {
-    public long kthElement(int k, int arr1[], int arr2[]) {
-        int[] arr3 = new int[arr1.length + arr2.length];
-        System.arraycopy(arr1, 0, arr3, 0, arr1.length);
-        System.arraycopy(arr2, 0, arr3, arr1.length, arr2.length);
-
-        Arrays.sort(arr3);
-
-        return arr3[k - 1]; // code here
+    public int kthElement(int a[], int b[], int k) {
+        // code here
+        ArrayList<Integer> arr=new ArrayList<>();
+        
+        for(int i=0;i<a.length;i++){
+            arr.add(a[i]);
+        }
+        
+        for(int i=0;i<b.length;i++){
+            arr.add(b[i]);
+        }
+        Collections.sort(arr);
+        return arr.get(k-1);
+        
     }
 }
