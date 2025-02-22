@@ -1,63 +1,72 @@
 //{ Driver Code Starts
-//Initial Template for Java
+// Initial Template for Java
 
 import java.io.*;
 import java.util.*;
 
-class GFG{
-    public static void main(String args[])throws IOException
-    {
+class GFG {
+    public static void main(String args[]) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         int t = Integer.parseInt(in.readLine());
-        while(t-- > 0){
+        while (t-- > 0) {
             String S = in.readLine();
-            
+
             Solution ob = new Solution();
             System.out.println(ob.maxLength(S));
+
+            System.out.println("~");
         }
     }
 }
 // } Driver Code Ends
 
 
-//User function Template for Java
 
 class Solution{
-    static int maxLength(String S){
-       int n = S.length();
-        int open=0; int close=0;
-        int ans=0;
-        //left to right
-         for(int i=0; i<n; i++){
-            char ch = S.charAt(i);
-            if(ch=='(') 
-            {
-                open++;
+    int max = 0;
+    static int maxLength(String s){
+        // code here
+        int n = s.length();
+        int left = 0;
+        int right = 0 ;
+        int max = 0;
+        
+        for(int i = 0 ; i < n ; i++) {
+            if(s.charAt(i) == '(')
+                left++;
+                
+            if(s.charAt(i) == ')')
+                right++;
+                
+            if(left == right) {
+                max = Math.max(max , 2 * left);
             }
-            else{
-                close++;
-            } 
-            
-            if(open == close) 
-            {
-                ans = Math.max(ans, open*2);
+            if(right > left){
+                left = 0;
+                right = 0;
             }
-            else{ 
-                if(close > open)  
-                    close=open=0;
+        }
+        right = 0;
+        left = 0;
+        
+        for(int i = n-1 ; i >= 0 ; i--) {
+            if(s.charAt(i) == '(')
+                left++;
+                
+            if(s.charAt(i) == ')')
+                right++;
+                
+            if(left == right) {
+                max = Math.max(max , 2 * left);
             }
-         }
-         open=0; close=0;
-         //right to left
-         for(int i=n-1; i>=0; i--){
-            char ch = S.charAt(i);
-            if(ch=='(') open++;
-            else close++;
-            
-           if(open == close) ans = Math.max(ans, open*2);
-            
-            else if(open > close)  close=open=0;
-         }
-         return ans;  // code here
+            if(right < left){
+                left = 0;
+                right = 0;
+            }
+        }
+        
+        return max;
     }
+    
+    
 }
