@@ -13,7 +13,6 @@ public class Main {
 
         while (t-- > 0) {
             // taking total number of elements
-            int k = Integer.parseInt(br.readLine());
             String line = br.readLine();
             String[] tokens = line.split(" ");
 
@@ -28,47 +27,41 @@ public class Main {
             int[] arr = new int[array.size()];
             int idx = 0;
             for (int i : array) arr[idx++] = i;
-            ArrayList<Integer> res = new Solution().max_of_subarrays(k, arr);
+            int k = Integer.parseInt(br.readLine());
+            ArrayList<Integer> res = new Solution().maxOfSubarrays(arr, k);
 
             // printing the elements of the ArrayList
             for (int i = 0; i < res.size(); i++) System.out.print(res.get(i) + " ");
             System.out.println();
+            System.out.println("~");
         }
     }
 }
 // } Driver Code Ends
 
 
-// User function template for JAVA
-
 class Solution {
-    // Function to find maximum of each subarray of size k.
-    public ArrayList<Integer> max_of_subarrays(int k, int arr[]) {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        
-        int tempMax= findMax(0,k-1,arr);
-        list.add(tempMax);
-        
-        for(int i=1; i<=arr.length-k; i++){
-            if(tempMax == arr[i-1] ){
-                tempMax = findMax(i, i+k-1,arr);
-                list.add(tempMax);
+    public ArrayList<Integer> maxOfSubarrays(int arr[], int k) {
+             ArrayList<Integer> result = new ArrayList<>();
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> b[0] - a[0]); // Max Heap
+
+        for (int i = 0; i < arr.length; i++) {
+            // Insert current element with its index
+            maxHeap.add(new int[]{arr[i], i});
+
+            // Remove elements that are out of the current window
+            while (maxHeap.peek()[1] <= i - k) {
+                maxHeap.poll();
             }
-            else{
-                    tempMax = Math.max(tempMax, arr[i+k-1]);
-                    list.add(tempMax);
+
+            // Store max when we have processed at least k elements
+            if (i >= k - 1) {
+                result.add(maxHeap.peek()[0]);
             }
         }
-        return list;
+
+        return result;
+   // code here
         
-    }
-    
-    public int findMax(int start, int end, int arr[]){
-        int max=0;
-        while(start <= end){
-            max = Math.max(max, arr[start]);
-            start++;
-        }
-        return max; // Your code here
     }
 }
