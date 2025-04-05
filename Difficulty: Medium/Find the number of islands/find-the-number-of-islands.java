@@ -4,10 +4,10 @@ import java.util.*;
 class GFG {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int tc = scanner.nextInt(); // Number of test cases
+        int tc = scanner.nextInt();
         while (tc-- > 0) {
-            int n = scanner.nextInt(); // Number of rows
-            int m = scanner.nextInt(); // Number of columns
+            int n = scanner.nextInt();
+            int m = scanner.nextInt();
             char[][] grid = new char[n][m];
 
             // Read the grid input
@@ -17,8 +17,9 @@ class GFG {
                 }
             }
             Solution obj = new Solution();
-            int ans = obj.numIslands(grid);
+            int ans = obj.countIslands(grid);
             System.out.println(ans);
+            System.out.println("~");
         }
         scanner.close();
     }
@@ -28,29 +29,43 @@ class GFG {
 
 
 class Solution {
-    int[][] dic = new int[][] { { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 } };
+    // Directions: 8 possible directions around a cell
+    int[] dx = {-1, -1, -1,  0, 0, 1, 1, 1};
+    int[] dy = {-1,  0,  1, -1, 1, -1, 0, 1};
 
-    public int numIslands(char[][] grid) {
-        int n = grid.length, m = grid[0].length, ans = 0, x, y;
-        Queue<int[]> q = new LinkedList<>();
-        boolean[][] isV = new boolean[n][m];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++)
-                if (!isV[i][j] && grid[i][j] == '1') {
-                    ans++;
-                    q.add(new int[] { i, j });
-                    while (!q.isEmpty()) {
-                        int[] c = q.poll();
-                        x = c[0];
-                        y = c[1];
-                        if (x < 0 || y < 0 || x >= n || y >= m || isV[x][y] || grid[x][y] == '0')
-                            continue;
-                        isV[x][y] = true;
-                        for (int[] k : dic)
-                            q.add(new int[] { x + k[0], y + k[1] });
-                    }
-                }
-        return ans;
+    void dfs(int row, int col, int m, int n, char[][] grid, boolean[][] visited) {
+        visited[row][col] = true;
+
+        // Check all 8 directions
+        for (int i = 0; i < 8; i++) {
+            int newRow = row + dx[i];
+            int newCol = col + dy[i];
+
+            // Check boundaries and if the cell is land and not visited
+            if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n &&
+                !visited[newRow][newCol] && grid[newRow][newCol] == 'L') {
+                dfs(newRow, newCol, m, n, grid, visited);
+            }
+        }
     }
 
+    public int countIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int count = 0;
+
+        // Traverse all cells
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // If land and not visited, start DFS
+                if (grid[i][j] == 'L' && !visited[i][j]) {
+                    dfs(i, j, m, n, grid, visited);
+                    count++; // one island completed
+                }
+            }
+        }
+
+        return count;
+    }
 }
